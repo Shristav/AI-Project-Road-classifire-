@@ -1,3 +1,6 @@
 venv/*
 Broken/
 Not_Broken/
+main.ipynb/
+best_road_model.keras/
+logs/*

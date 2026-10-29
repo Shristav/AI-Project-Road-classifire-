@@ -46,5 +46,30 @@ function clearImage(){input.value='';preview.removeAttribute('src');loaded.class
 function checkQuality(){const w=preview.naturalWidth,h=preview.naturalHeight;const canvas=document.createElement('canvas');canvas.width=64;canvas.height=64;const ctx=canvas.getContext('2d',{willReadFrequently:true});ctx.drawImage(preview,0,0,64,64);const d=ctx.getImageData(0,0,64,64).data;let sum=0;for(let i=0;i<d.length;i+=4)sum+=.2126*d[i]+.7152*d[i+1]+.0722*d[i+2];const brightness=sum/(d.length/4);let advice='Resolution and lighting look suitable for a clear preview.';let tone='good';if(w<256||h<256){advice='This image is small. A higher-resolution photo may show road details more clearly.';tone='warn'}else if(brightness<55){advice='This image looks quite dark. Try taking another photo in brighter natural light.';tone='warn'}else if(brightness>225){advice='This image looks very bright. Reduce glare or retake it in softer light.';tone='warn'}quality.innerHTML='<strong>Photo quality check</strong>'+advice+'<div style="margin-top:5px;color:#89929b">Basic resolution and brightness check only; it does not detect road damage.</div>';quality.className='quality '+tone}
 function useFile(file){notice.classList.add('hidden');notice.classList.remove('error');if(!file)return;if(!['image/jpeg','image/png'].includes(file.type)){notice.textContent='Please choose a JPG or PNG image.';notice.classList.remove('hidden');notice.classList.add('error');return}if(file.size>20*1024*1024){notice.textContent='This image is larger than 20 MB. Choose a smaller file.';notice.classList.remove('hidden');notice.classList.add('error');return}const url=URL.createObjectURL(file);preview.onload=()=>{document.getElementById('filename').textContent=file.name;document.getElementById('dimensions').textContent=`${preview.naturalWidth} × ${preview.naturalHeight} px · ${(file.size/1024/1024).toFixed(2)} MB`;empty.classList.add('hidden');loaded.classList.remove('hidden');drop.classList.add('has-image');notice.textContent='Image preview is ready. Classification will be available after the CNN model is trained and connected.';notice.classList.remove('hidden');checkQuality()};preview.src=url}
 browse.addEventListener('click',e=>{e.stopPropagation();input.click()});drop.addEventListener('click',e=>{if(e.target.closest('#remove'))return;if(e.target.closest('#browse'))return;input.click()});drop.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();input.click()}});input.addEventListener('change',()=>useFile(input.files[0]));document.getElementById('remove').addEventListener('click',e=>{e.stopPropagation();clearImage()});document.getElementById('camera').addEventListener('click',e=>{e.stopPropagation();input.click()});preview.addEventListener('click',e=>{e.stopPropagation();const layer=document.createElement('div');layer.className='zoom';layer.setAttribute('role','dialog');layer.setAttribute('aria-label','Full size image preview');const img=document.createElement('img');img.src=preview.src;img.alt='Full size road image';layer.appendChild(img);layer.addEventListener('click',()=>layer.remove());document.body.appendChild(layer)});for(const event of ['dragenter','dragover'])drop.addEventListener(event,e=>{e.preventDefault();drop.classList.add('over')});for(const event of ['dragleave','drop'])drop.addEventListener(event,e=>{e.preventDefault();drop.classList.remove('over')});drop.addEventListener('drop',e=>useFile(e.dataTransfer.files[0]));
+async function sendImageToBackend(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    notice.textContent = 'Analyzing road condition with CNN model...';
+    notice.classList.remove('hidden', 'error');
+
+    try {
+        const response = callBackend = await fetch('http://localhost:5000/predict', {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+
+        if (result.success) {
+            notice.textContent = `Analysis Complete: Surface is classified as "${result.label}" with ${result.confidence}% confidence.`;
+        } else {
+            notice.textContent = 'Classification error: ' + result.error;
+            notice.classList.add('error');
+        }
+    } catch (err) {
+        notice.textContent = 'Failed to connect to the prediction backend server.';
+        notice.classList.add('error');
+    }
+}
 </script>
 </body></html>

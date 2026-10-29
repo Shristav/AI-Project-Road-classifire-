@@ -9,9 +9,14 @@ import keras
 app = Flask(__name__, template_folder='.')
 CORS(app)
 
-# Load your trained Keras model
-# Make sure 'road_damage_mobilenet.keras' is in the same directory
-model = keras.models.load_model('road_damage_mobilenet.keras')
+# Load your trained Keras model safely
+MODEL_PATH = 'road_damage_mobilenet.keras'
+if os.path.exists(MODEL_PATH):
+    model = keras.models.load_model(MODEL_PATH)
+    print("Successfully loaded Keras model from disk.")
+else:
+    model = None
+    print(f"Warning: Model file '{MODEL_PATH}' not found in directory.")
 
 IMG_SIZE = 224
 
@@ -21,28 +26,29 @@ def home():
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    if model is None:
+        return jsonify({'error': 'Keras model not loaded on server.'}), 500
+    
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
     
     file = request.files['file']
     try:
-        # Preprocess image exactly like your training pipeline
         img = Image.open(file).convert("RGB").resize((IMG_SIZE, IMG_SIZE))
         img_array = np.array(img, dtype=np.float32) / 255.0
-        img_array = np.expand_dims(img_array, axis=0)  # Shape: (1, 224, 224, 3)
+        img_array = np.expand_dims(img_array, axis=0)
         
-        # Run model prediction
         prediction = float(model.predict(img_array)[0][0])
         
-        # Interpret binary classification result
+        # Adjust threshold based on your model configuration (default > 0.5 = Broken)
         is_broken = prediction > 0.5
-        label = "Broken" if is_broken else "Not Broken"
-        confidence = prediction if is_broken else (1 - prediction)
+        label = "Broken" if is_broken else "Intact"
+        confidence = round((prediction if is_broken else (1 - prediction)) * 100, 2)
         
         return jsonify({
             'success': True,
             'label': label,
-            'confidence': round(confidence * 100, 2)
+            'confidence': confidence
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500

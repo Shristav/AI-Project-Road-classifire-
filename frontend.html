@@ -1,75 +1,258 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-neutral-950">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Road Condition · Network Insights</title>
-<style>
-:root{--ink:#202a33;--muted:#75808b;--gold:#d2a64e;--line:#e8ebee;--green:#438673;--paper:#fff;--bg:#f7f8f9}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
-main{width:min(100% - 40px,1120px);margin:42px auto}.head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:28px}.title{margin:0;font-size:clamp(27px,4vw,38px);letter-spacing:-1.1px;line-height:1.15}.sub{color:var(--muted);margin:9px 0 0;font-size:16px}.secure{display:flex;align-items:center;gap:9px;padding:11px 15px;border:1px solid var(--line);border-radius:11px;background:#fff;color:#6c8e82;font-size:13px;white-space:nowrap}.shield{font-size:18px}
-.drop{min-height:390px;border:2px dashed #e5c77f;border-radius:16px;background:#fffefa;display:grid;place-items:center;text-align:center;padding:32px 20px;transition:.18s ease;cursor:pointer;outline:none}.drop:hover,.drop:focus-visible,.drop.over{background:#fff9eb;border-color:#c89a3c;box-shadow:0 0 0 4px #d2a64e1c}.drop.has-image{min-height:260px}.icon{display:grid;place-items:center;width:82px;height:82px;margin:0 auto 24px;border-radius:22px;background:#fbf3e4;color:#c89a3c}.icon svg{width:38px;height:38px}.prompt{font-size:23px;letter-spacing:-.45px}.browse{border:0;background:none;padding:0;color:#a77b26;text-decoration:underline;text-underline-offset:3px;font:600 15px inherit;cursor:pointer}.or{color:#89929b}.meta{margin-top:26px;display:flex;justify-content:center;align-items:center;gap:12px;color:#89929b;font-size:13px}.fileicon{font-size:17px}.dot{color:#c2c8ce}.hidden{display:none!important}
-.footer{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-top:24px;padding:19px 4px 0;border-top:1px solid var(--line)}.tip-title{font-size:14px;font-weight:700}.check{color:var(--green);font-size:18px;margin-right:7px}.tip-text{margin:9px 0 0;color:#8a939c;font-size:13px}.model{align-self:center;color:#8a939c;font-size:12px;letter-spacing:.08em;white-space:nowrap}.model b{color:#58636e;letter-spacing:0;font-size:13px;margin-left:7px}.preview-wrap{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:18px;align-items:center;width:100%;max-width:800px;text-align:left}.preview-wrap img{width:100%;max-height:370px;object-fit:contain;border-radius:10px;background:#f1f2f3}.file-info{min-width:0}.filename{font-weight:650;overflow-wrap:anywhere}.dimensions{color:var(--muted);font-size:13px;margin-top:5px}.remove{margin-top:18px;border:1px solid var(--line);background:white;color:#58636e;border-radius:8px;padding:8px 11px;cursor:pointer}.notice{max-width:800px;margin:16px auto 0;padding:12px 14px;border-radius:9px;background:#fff7e5;color:#81621e;font-size:13px;text-align:left}.notice.error{background:#fff0ef;color:#a63830}.status{min-height:20px;margin-top:12px;color:var(--muted);font-size:13px}.actions{display:flex;gap:8px;flex-wrap:wrap}.quality{max-width:800px;margin:12px auto;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px;color:#58636e}.quality strong{display:block;margin-bottom:5px}.quality.good{border-color:#cfe3db;background:#f4faf7}.quality.warn{border-color:#f0dfb7;background:#fffaf0}.zoom{position:fixed;inset:0;z-index:5;background:#10151dcc;display:grid;place-items:center;padding:24px;cursor:zoom-out}.zoom img{max-width:95vw;max-height:92vh;object-fit:contain;border-radius:8px}.preview-wrap img{cursor:zoom-in}
-.topnav{display:flex;align-items:center;justify-content:space-between;margin-bottom:34px;border-bottom:1px solid var(--line);padding-bottom:15px}.brand{font-size:14px;font-weight:750;letter-spacing:.02em}.tabs{display:flex;gap:7px}.tab{border:1px solid transparent;background:transparent;padding:8px 12px;border-radius:8px;color:#687480;font:inherit;font-weight:600;font-size:13px;cursor:pointer}.tab.active{background:#fff;border-color:var(--line);color:#26313b;box-shadow:0 1px 2px #1b27301a}.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#71839a;font-weight:700}.analytics-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}.analytics-head h1{margin:2px 0 0;font-size:36px;letter-spacing:-1px}.analytics-head p{margin:7px 0 0;color:var(--muted)}.range{border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 12px;color:#66717c;font:inherit;font-size:14px}.demo{margin-bottom:16px;padding:10px 12px;border:1px solid #f0dfb7;border-radius:9px;background:#fffaf0;color:#81621e;font-size:12px}.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.kpi{position:relative;background:#fff;border:1px solid var(--line);border-radius:13px;padding:19px 20px;min-height:154px;box-shadow:0 1px 2px #19263308}.kpi-label{font-size:13px;color:#718096}.kpi-value{font-size:32px;font-weight:720;letter-spacing:-.8px;margin:12px 0 5px}.kpi-value small{font-size:15px;font-weight:500;letter-spacing:0;color:#66717c}.trend{font-size:12px;color:#74808b}.trend.up{color:#159576}.trend.down{color:#e15d52}.kicon{position:absolute;right:16px;top:16px;width:42px;height:42px;border-radius:11px;display:grid;place-items:center;font-size:21px}.blue{color:#4b81b7;background:#edf4fa}.red{color:#e66358;background:#fff0ee}.mint{color:#37a483;background:#edf8f3}.amber{color:#d28b22;background:#fbf4e8}.panel{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:20px}.panel h2{font-size:17px;margin:0}.panel-sub{font-size:12px;color:var(--muted);margin-top:4px}.districts{display:grid;gap:14px;margin-top:20px}.district{display:grid;grid-template-columns:130px 1fr 42px;gap:12px;align-items:center;font-size:13px;color:#687480}.track{height:9px;background:#f0f2f4;border-radius:99px;overflow:hidden}.bar{height:100%;background:#d8b35f;border-radius:99px}.district strong{text-align:right;color:#33404b}.hidden-view{display:none!important}
-@media(max-width:650px){main{width:min(100% - 24px,1120px);margin:25px auto}.head{flex-direction:column}.secure{order:-1}.drop{min-height:320px}.preview-wrap{grid-template-columns:1fr}.preview-wrap img{max-height:280px}.footer{flex-direction:column;gap:15px}.model{align-self:flex-start}.analytics-head{align-items:flex-start;flex-direction:column}.analytics-head h1{font-size:30px}.kpis{grid-template-columns:1fr}.district{grid-template-columns:78px 1fr 36px}}
-</style>
-</head>
-<body>
-<main>
-  <nav class="topnav"><div class="brand">ROAD CONDITION</div><div class="tabs"><button class="tab" data-view="analytics">Analytics</button><button class="tab active" data-view="analyzer">Image analyzer</button></div></nav>
-  <div id="analyzerView">
-  <header class="head"><div><h1 class="title">Image analyzer</h1><p class="sub">Turn a street-level photo into a clear maintenance decision.</p></div><div class="secure"><span class="shield">♧</span> Secure image processing</div></header>
-  <input id="file" class="hidden" type="file" accept="image/jpeg,image/png,.jpg,.jpeg,.png" capture="environment">
-  <section id="drop" class="drop" role="button" tabindex="0" aria-label="Upload a road image">
-    <div id="empty"><div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="13" height="15" rx="2"/><circle cx="8" cy="10" r="1.4"/><path d="m4 17 4-4 3 3 2-2 3 3M19 3v6m-3-3h6"/></svg></div><div class="prompt">Drop your road image here</div><div style="margin-top:9px"><span class="or">or </span><button id="browse" class="browse" type="button">browse files</button><span class="or"> from your device</span></div><div class="meta"><span class="fileicon">▧</span><span>JPG or PNG</span><span class="dot">•</span><span>Max file size 20 MB</span></div></div>
-    <div id="loaded" class="preview-wrap hidden"><img id="preview" alt="Uploaded road preview"><div class="file-info"><div class="filename" id="filename"></div><div class="dimensions" id="dimensions"></div><div class="status">Image ready for analysis.</div><div class="actions"><button id="camera" class="remove" type="button">Use camera</button><button id="remove" class="remove" type="button">Remove image</button></div></div></div>
-  </section>
-  <div id="notice" class="notice hidden" role="status">Image preview is ready. Classification will be available after the CNN model is trained and connected.</div>
-  <div id="quality" class="quality hidden" aria-live="polite"></div>
-  <footer class="footer"><div><div class="tip-title"><span class="check">✓</span>What makes a good road photo?</div><p class="tip-text">Capture the surface from a low angle in natural light. Keep the defect centered in frame.</p></div><div class="model">MODEL <b>CNN · awaiting training</b></div></footer>
-  </div>
-  <section id="analyticsView" class="hidden-view" aria-label="Analytics dashboard">
-    <div class="analytics-head"><div><div class="eyebrow">Network insights</div><h1>Analytics</h1><p>Understand condition trends and allocate crews where they matter.</p></div><select class="range" aria-label="Date range"><option>Last 30 days</option><option>Last 7 days</option><option>Last 90 days</option></select></div>
-    <div class="demo">Demo dashboard values for layout preview. Live analytics will appear after inspection data is connected.</div>
-    <div class="kpis">
-      <article class="kpi"><div class="kicon blue">◫</div><div class="kpi-label">Total inspections</div><div class="kpi-value">1,284</div><div class="trend up">↗ 12.8% &nbsp; <span style="color:#89929b">vs. prior period</span></div></article>
-      <article class="kpi"><div class="kicon red">ⓘ</div><div class="kpi-label">Defects identified</div><div class="kpi-value">346</div><div class="trend down">↘ 5.4% &nbsp; <span style="color:#89929b">vs. prior period</span></div></article>
-      <article class="kpi"><div class="kicon mint">∿</div><div class="kpi-label">Resolved this month</div><div class="kpi-value">82</div><div class="trend up">↗ 18.2% &nbsp; <span style="color:#89929b">vs. prior period</span></div></article>
-      <article class="kpi"><div class="kicon amber">⌁</div><div class="kpi-label">Avg. time to repair</div><div class="kpi-value">4.2 <small>days</small></div><div class="trend up">↗ 0.8 days &nbsp; <span style="color:#89929b">faster than last month</span></div></article>
-    </div>
-    <article class="panel"><h2>Defects by district</h2><div class="panel-sub">Illustrative distribution · demo data</div><div class="districts"><div class="district"><span>Central</span><div class="track"><div class="bar" style="width:84%"></div></div><strong>92</strong></div><div class="district"><span>North</span><div class="track"><div class="bar" style="width:68%"></div></div><strong>74</strong></div><div class="district"><span>South</span><div class="track"><div class="bar" style="width:57%"></div></div><strong>63</strong></div><div class="district"><span>East</span><div class="track"><div class="bar" style="width:46%"></div></div><strong>51</strong></div><div class="district"><span>West</span><div class="track"><div class="bar" style="width:39%"></div></div><strong>43</strong></div></div></article>
-  </section>
-</main>
-<script>
-document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===tab));document.getElementById('analyticsView').classList.toggle('hidden-view',tab.dataset.view!=='analytics');document.getElementById('analyzerView').classList.toggle('hidden-view',tab.dataset.view!=='analyzer')}));
-const input=document.getElementById('file'),drop=document.getElementById('drop'),browse=document.getElementById('browse'),empty=document.getElementById('empty'),loaded=document.getElementById('loaded'),preview=document.getElementById('preview'),notice=document.getElementById('notice'),quality=document.getElementById('quality');
-function clearImage(){input.value='';preview.removeAttribute('src');loaded.classList.add('hidden');empty.classList.remove('hidden');drop.classList.remove('has-image');notice.classList.add('hidden');notice.classList.remove('error');quality.classList.add('hidden');quality.className='quality hidden'}
-function checkQuality(){const w=preview.naturalWidth,h=preview.naturalHeight;const canvas=document.createElement('canvas');canvas.width=64;canvas.height=64;const ctx=canvas.getContext('2d',{willReadFrequently:true});ctx.drawImage(preview,0,0,64,64);const d=ctx.getImageData(0,0,64,64).data;let sum=0;for(let i=0;i<d.length;i+=4)sum+=.2126*d[i]+.7152*d[i+1]+.0722*d[i+2];const brightness=sum/(d.length/4);let advice='Resolution and lighting look suitable for a clear preview.';let tone='good';if(w<256||h<256){advice='This image is small. A higher-resolution photo may show road details more clearly.';tone='warn'}else if(brightness<55){advice='This image looks quite dark. Try taking another photo in brighter natural light.';tone='warn'}else if(brightness>225){advice='This image looks very bright. Reduce glare or retake it in softer light.';tone='warn'}quality.innerHTML='<strong>Photo quality check</strong>'+advice+'<div style="margin-top:5px;color:#89929b">Basic resolution and brightness check only; it does not detect road damage.</div>';quality.className='quality '+tone}
-function useFile(file){notice.classList.add('hidden');notice.classList.remove('error');if(!file)return;if(!['image/jpeg','image/png'].includes(file.type)){notice.textContent='Please choose a JPG or PNG image.';notice.classList.remove('hidden');notice.classList.add('error');return}if(file.size>20*1024*1024){notice.textContent='This image is larger than 20 MB. Choose a smaller file.';notice.classList.remove('hidden');notice.classList.add('error');return}const url=URL.createObjectURL(file);preview.onload=()=>{document.getElementById('filename').textContent=file.name;document.getElementById('dimensions').textContent=`${preview.naturalWidth} × ${preview.naturalHeight} px · ${(file.size/1024/1024).toFixed(2)} MB`;empty.classList.add('hidden');loaded.classList.remove('hidden');drop.classList.add('has-image');notice.textContent='Image preview is ready. Classification will be available after the CNN model is trained and connected.';notice.classList.remove('hidden');checkQuality()};preview.src=url}
-browse.addEventListener('click',e=>{e.stopPropagation();input.click()});drop.addEventListener('click',e=>{if(e.target.closest('#remove'))return;if(e.target.closest('#browse'))return;input.click()});drop.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();input.click()}});input.addEventListener('change',()=>useFile(input.files[0]));document.getElementById('remove').addEventListener('click',e=>{e.stopPropagation();clearImage()});document.getElementById('camera').addEventListener('click',e=>{e.stopPropagation();input.click()});preview.addEventListener('click',e=>{e.stopPropagation();const layer=document.createElement('div');layer.className='zoom';layer.setAttribute('role','dialog');layer.setAttribute('aria-label','Full size image preview');const img=document.createElement('img');img.src=preview.src;img.alt='Full size road image';layer.appendChild(img);layer.addEventListener('click',()=>layer.remove());document.body.appendChild(layer)});for(const event of ['dragenter','dragover'])drop.addEventListener(event,e=>{e.preventDefault();drop.classList.add('over')});for(const event of ['dragleave','drop'])drop.addEventListener(event,e=>{e.preventDefault();drop.classList.remove('over')});drop.addEventListener('drop',e=>useFile(e.dataTransfer.files[0]));
-async function sendImageToBackend(file) {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    notice.textContent = 'Analyzing road condition with CNN model...';
-    notice.classList.remove('hidden', 'error');
-
-    try {
-        const response = callBackend = await fetch('http://localhost:5000/predict', {
-            method: 'POST',
-            body: formData
-        });
-        const result = await response.json();
-
-        if (result.success) {
-            notice.textContent = `Analysis Complete: Surface is classified as "${result.label}" with ${result.confidence}% confidence.`;
-        } else {
-            notice.textContent = 'Classification error: ' + result.error;
-            notice.classList.add('error');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road Damage Inspector | Minimal AI</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
         }
-    } catch (err) {
-        notice.textContent = 'Failed to connect to the prediction backend server.';
-        notice.classList.add('error');
-    }
-}
-</script>
-</body></html>
+    </script>
+</head>
+<body class="h-full text-neutral-200 font-sans bg-neutral-950 flex flex-col selection:bg-neutral-800 selection:text-white">
+
+    <!-- Header -->
+    <header class="border-b border-neutral-900 bg-neutral-950/90 backdrop-blur sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-100">
+                <i class="fa-solid fa-road text-sm"></i>
+            </div>
+            <div>
+                <h1 class="font-semibold text-sm tracking-tight text-white">Road Surface Inspector</h1>
+                <p class="text-[11px] text-neutral-500 font-mono">MobileNetV2 Inference</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-mono bg-neutral-900 border border-neutral-800 text-neutral-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span>API: localhost:5000</span>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 max-w-5xl w-full mx-auto px-6 py-8 flex flex-col justify-center">
+        
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+
+            <!-- Left: Upload Section -->
+            <section class="md:col-span-7 bg-neutral-900/40 border border-neutral-900 rounded-2xl p-6 flex flex-col justify-between space-y-6">
+                <div>
+                    <h2 class="text-xs font-mono tracking-wider uppercase text-neutral-400">01. Input Image</h2>
+                    <p class="text-sm text-neutral-300 mt-1">Upload or drag road surface photograph</p>
+                </div>
+
+                <!-- Dropzone -->
+                <div id="dropZone" class="relative border border-dashed border-neutral-800 hover:border-neutral-600 bg-neutral-900/60 rounded-xl p-8 text-center cursor-pointer transition-all flex flex-col items-center justify-center min-h-[260px] overflow-hidden">
+                    <input type="file" id="fileInput" accept="image/*" class="hidden" />
+
+                    <div id="uploadPrompt" class="space-y-3">
+                        <div class="w-12 h-12 rounded-xl bg-neutral-800/80 border border-neutral-700/50 flex items-center justify-center mx-auto text-neutral-400">
+                            <i class="fa-solid fa-arrow-up-from-bracket text-sm"></i>
+                        </div>
+                        <p class="text-xs text-neutral-300 font-medium">Click to browse or drop image here</p>
+                        <p class="text-[11px] text-neutral-500">JPG, PNG, WEBP</p>
+                    </div>
+
+                    <div id="previewContainer" class="hidden absolute inset-0 bg-neutral-950 flex items-center justify-center">
+                        <img id="imagePreview" class="w-full h-full object-contain p-2 rounded-xl" alt="Preview" />
+                        <div id="scanningOverlay" class="hidden absolute inset-0 bg-neutral-950/80 backdrop-blur-sm flex flex-col items-center justify-center">
+                            <div class="w-6 h-6 border-2 border-neutral-700 border-t-neutral-100 rounded-full animate-spin mb-2"></div>
+                            <span class="text-[11px] font-mono tracking-widest text-neutral-400">ANALYZING...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <button id="analyzeBtn" disabled class="w-full py-3 px-4 rounded-xl font-medium text-xs tracking-wider uppercase text-neutral-950 bg-neutral-100 hover:bg-white disabled:opacity-30 disabled:cursor-not-allowed transition-all">
+                        Run Analysis
+                    </button>
+                    <button id="clearBtn" class="hidden w-full py-2 text-xs text-neutral-500 hover:text-neutral-300 transition-colors">
+                        Clear Image
+                    </button>
+                </div>
+            </section>
+
+            <!-- Right: Results Section -->
+            <section class="md:col-span-5 bg-neutral-900/40 border border-neutral-900 rounded-2xl p-6 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-xs font-mono tracking-wider uppercase text-neutral-400">02. Diagnostics</h2>
+                    <p class="text-sm text-neutral-300 mt-1">Classification Output</p>
+                </div>
+
+                <div id="resultsCard" class="my-6 space-y-6">
+                    <div id="idleState" class="py-12 text-center space-y-2">
+                        <p class="text-xs text-neutral-500 font-mono">Awaiting inference input...</p>
+                    </div>
+
+                    <div id="activeResultState" class="hidden space-y-6">
+                        <!-- Status Badge -->
+                        <div id="statusBadge" class="p-4 rounded-xl border border-neutral-800 bg-neutral-900/80 flex items-center justify-between">
+                            <span id="statusLabel" class="text-xs font-mono font-bold tracking-wider uppercase text-neutral-100">--</span>
+                            <span id="statusIcon" class="text-sm"></span>
+                        </div>
+
+                        <!-- Confidence Bar -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center text-xs font-mono text-neutral-400">
+                                <span>Confidence</span>
+                                <span id="confidenceValue" class="text-neutral-200">0%</span>
+                            </div>
+                            <div class="w-full bg-neutral-900 h-1.5 rounded-full overflow-hidden border border-neutral-800">
+                                <div id="confidenceBar" class="h-full bg-neutral-100 rounded-full transition-all duration-700" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Details -->
+                        <div class="grid grid-cols-2 gap-3 text-xs font-mono">
+                            <div class="bg-neutral-900/50 p-3 rounded-xl border border-neutral-800/80">
+                                <span class="text-neutral-500 text-[10px] block">LATENCY</span>
+                                <span id="metricLatency" class="text-neutral-300 mt-1 block">-- ms</span>
+                            </div>
+                            <div class="bg-neutral-900/50 p-3 rounded-xl border border-neutral-800/80">
+                                <span class="text-neutral-500 text-[10px] block">MODEL</span>
+                                <span class="text-neutral-300 mt-1 block">MobileNetV2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="errorState" class="hidden p-4 rounded-xl border border-rose-900/50 bg-rose-950/20 text-rose-300 text-xs font-mono">
+                        <p id="errorMessage">Backend connection error.</p>
+                    </div>
+                </div>
+
+                <div class="text-[11px] text-neutral-600 font-mono text-center">
+                    <span>POST /predict</span>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Client Script -->
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadPrompt = document.getElementById('uploadPrompt');
+        const previewContainer = document.getElementById('previewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const scanningOverlay = document.getElementById('scanningOverlay');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        
+        const idleState = document.getElementById('idleState');
+        const activeResultState = document.getElementById('activeResultState');
+        const errorState = document.getElementById('errorState');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        const statusBadge = document.getElementById('statusBadge');
+        const statusLabel = document.getElementById('statusLabel');
+        const statusIcon = document.getElementById('statusIcon');
+        const confidenceValue = document.getElementById('confidenceValue');
+        const confidenceBar = document.getElementById('confidenceBar');
+        const metricLatency = document.getElementById('metricLatency');
+
+        let selectedFile = null;
+
+        dropZone.addEventListener('click', () => { if (!selectedFile) fileInput.click(); });
+        fileInput.addEventListener('change', (e) => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+        
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+        });
+
+        clearBtn.addEventListener('click', resetState);
+
+        function handleFile(file) {
+            selectedFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                uploadPrompt.classList.add('hidden');
+                previewContainer.classList.remove('hidden');
+                clearBtn.classList.remove('hidden');
+                analyzeBtn.disabled = false;
+                idleState.classList.remove('hidden');
+                activeResultState.classList.add('hidden');
+                errorState.classList.add('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function resetState() {
+            selectedFile = null;
+            fileInput.value = '';
+            imagePreview.src = '';
+            uploadPrompt.classList.remove('hidden');
+            previewContainer.classList.add('hidden');
+            clearBtn.classList.add('hidden');
+            analyzeBtn.disabled = true;
+            idleState.classList.remove('hidden');
+            activeResultState.classList.add('hidden');
+            errorState.classList.add('hidden');
+        }
+
+        analyzeBtn.addEventListener('click', async () => {
+            if (!selectedFile) return;
+            scanningOverlay.classList.remove('hidden');
+            analyzeBtn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            const start = performance.now();
+
+            try {
+                const res = await fetch('http://localhost:5000/predict', { method: 'POST', body: formData });
+                const data = await res.json();
+                const latency = Math.round(performance.now() - start);
+
+                if (data.error) throw new Error(data.error);
+
+                idleState.classList.add('hidden');
+                activeResultState.classList.remove('hidden');
+                metricLatency.textContent = `${latency} ms`;
+
+                const isBroken = data.label === 'Broken';
+                const conf = data.confidence;
+
+                confidenceValue.textContent = `${conf}%`;
+                confidenceBar.style.width = `${conf}%`;
+
+                if (isBroken) {
+                    statusLabel.textContent = "Surface Damaged / Broken";
+                    statusIcon.className = "fa-solid fa-triangle-exclamation text-amber-400";
+                    statusBadge.className = "p-4 rounded-xl border border-amber-900/50 bg-amber-950/20 flex items-center justify-between";
+                } else {
+                    statusLabel.textContent = "Surface Intact";
+                    statusIcon.className = "fa-solid fa-circle-check text-emerald-400";
+                    statusBadge.className = "p-4 rounded-xl border border-emerald-900/50 bg-emerald-950/20 flex items-center justify-between";
+                }
+            } catch (err) {
+                idleState.classList.add('hidden');
+                errorState.classList.remove('hidden');
+                errorMessage.textContent = err.message || "Failed to connect to backend.";
+            } finally {
+                scanningOverlay.classList.add('hidden');
+                analyzeBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

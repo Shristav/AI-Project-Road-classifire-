@@ -6,7 +6,7 @@ from PIL import Image
 import tensorflow as tf
 import keras
 
-app = Flask(__name__, template_folder='.')
+app = Flask(__name__)
 CORS(app)
 
 # Load your trained Keras model safely

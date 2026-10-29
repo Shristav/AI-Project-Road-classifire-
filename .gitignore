@@ -5,4 +5,5 @@ main.ipynb/
 best_road_model.keras/
 logs/*
 road_damage_mobilenet.keras
+.vscode/*
 .gitignore

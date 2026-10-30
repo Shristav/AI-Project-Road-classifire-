@@ -38,7 +38,7 @@ def predict():
         img_array = np.array(img, dtype=np.float32) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
         
-        prediction = float(model.predict(img_array)[0][0])
+        prediction = float(model.predict(img_array, verbose=0)[0][0])
         
         # Adjust threshold based on your model configuration (default > 0.5 = Broken)
         is_broken = prediction > 0.5

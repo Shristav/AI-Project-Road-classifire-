@@ -41,7 +41,7 @@
         </div>
         <div class="flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-mono bg-neutral-900 border border-neutral-800 text-neutral-400">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-            <span>API: localhost:5000</span>
+            <span id="apiLabel">API: localhost:5000</span>
         </div>
     </header>
 
@@ -167,6 +167,8 @@
         const confidenceBar = document.getElementById('confidenceBar');
         const metricLatency = document.getElementById('metricLatency');
 
+        document.getElementById('apiLabel').textContent = 'API: ' + location.host;
+
         let selectedFile = null;
 
         dropZone.addEventListener('click', () => { if (!selectedFile) fileInput.click(); });
@@ -220,7 +222,10 @@
 
             try {
                 const res = await fetch('/predict', { method: 'POST', body: formData });
-                const data = await res.json();
+                const raw = await res.text();
+                let data;
+                try { data = JSON.parse(raw); }
+                catch { throw new Error(`Server returned status ${res.status} with no valid data (it may have timed out or run out of memory).`); }
                 const latency = Math.round(performance.now() - start);
 
                 if (data.error) throw new Error(data.error);
